@@ -1,8 +1,15 @@
 package com.liyuyu.demo.common.redis;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 
 import redis.clients.jedis.JedisCommands;
 
@@ -17,7 +24,20 @@ public class RedisLock {
 
 	private RedisTemplate<String, String> redisTemplate;
 	private String key;
+	private String value;
 	private long timeout;
+	private static final RedisScript<Long> UNLOCK_SCRIPT;
+	
+    static {
+        StringBuilder sb = new StringBuilder();
+        sb.append("if redis.call(\"get\",KEYS[1]) == ARGV[1] ");
+        sb.append("then ");
+        sb.append("    return redis.call(\"del\",KEYS[1]) ");
+        sb.append("else ");
+        sb.append("    return 0 ");
+        sb.append("end ");
+        UNLOCK_SCRIPT = RedisScript.of(sb.toString());
+    }
 
 	/**
 	 * @param redisTemplate
@@ -28,6 +48,7 @@ public class RedisLock {
 		super();
 		this.redisTemplate = redisTemplate;
 		this.key = key;
+		this.value = UUID.randomUUID().toString();
 		this.timeout = timeout;
 	}
 
@@ -41,7 +62,7 @@ public class RedisLock {
 			RedisConnectionFactory redisConnectionFactory = redisTemplate.getConnectionFactory();
 			connection = redisConnectionFactory.getConnection();
 			JedisCommands client = (JedisCommands) connection.getNativeConnection();
-			String status = client.set(key, "", "NX", "EX", timeout);
+			String status = client.set(key, value, "NX", "EX", timeout);
 			if ("OK".equals(status)) {
 				return true;
 			}
@@ -54,10 +75,16 @@ public class RedisLock {
 	}
 
 	/**
-	 * 极端情况下,当任务执行时间大于key的过期时间时，会误删其他进程的锁
+	 * 解锁
+	 * @return
 	 */
-	public void unlock() {
-		redisTemplate.delete(key);
+	public boolean unlock() {
+		List<String> keys = Arrays.asList(key);
+		List<String> scriptArgs = Arrays.asList(value);
+		
+		Long result = redisTemplate.execute(UNLOCK_SCRIPT, keys, scriptArgs);
+		
+		return result != null;
 	}
 
 }
