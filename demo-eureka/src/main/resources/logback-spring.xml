@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="APPLICATION_NAME" value="eureka" />
+	<property name="LOG_HOME" value="/data/logs/${APPLICATION_NAME}" />
+	<property name="CHARSET" value="utf-8" />
+
+	<!-- 只记录错误日志 -->
+	<appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/error.${APPLICATION_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<charset>${CHARSET}</charset>
+			<pattern>%d{ISO8601} %-4relative [%thread] %-5level %logger.%M:%L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 记录所有级别的日志 -->
+	<appender name="ALLOF_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/info.${APPLICATION_NAME}.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<charset>${CHARSET}</charset>
+			<pattern>%d{ISO8601} %-4relative [%thread] %-5level %logger.%M:%L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>${CHARSET}</charset>
+			<pattern>%d{ISO8601} %-4relative [%thread] %-5level %logger.%M:%L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="ALLOF_FILE" />
+		<appender-ref ref="ERROR_FILE" />
+	</root>
+</configuration>

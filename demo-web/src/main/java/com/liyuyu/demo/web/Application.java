@@ -21,7 +21,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-		logger.info(" Start FinaceApplication Done");
+		logger.info(" Start Application Done");
 	}
 
 	@Bean
