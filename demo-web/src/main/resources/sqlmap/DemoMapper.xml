@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liyuyu.demo.web.dao.DemoMapper">
+	<resultMap id="BaseResultMap" type="com.liyuyu.demo.web.entity.DemoDO">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, age, create_time, update_time
+	</sql>
+	<select id="select1" resultMap="BaseResultMap">
+		SELECT 1 as id,'Lyle' as name,28
+		as age,'2019-00-00 00:00:00' as
+		create_time, '2019-00-00 00:00:00' as
+		update_time
+	</select>
+	<select id="countAll" resultType="java.lang.Integer">
+		select COUNT(*) from (SELECT
+		'Lyle' as name,28 as age UNION All SELECT 'sam'as name,27 as age 
+		UNION All SELECT 'rose' as name,24 as age) t;
+	</select>
+	<select id="selectAllByPage" parameterType="com.liyuyu.demo.web.page.Page"
+		resultMap="BaseResultMap">
+		SELECT 'Lyle' as name,28 as age UNION All SELECT 'sam' as name,27 as age
+		UNION All SELECT 'rose' as name,24 as age
+		limit #{offset}, #{pageSize}
+	</select>
+</mapper>

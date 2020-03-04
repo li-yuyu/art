@@ -1,0 +1,12 @@
+server:
+  port: 8080
+spring:
+   application:
+    name: springboot-demo
+   profiles:
+     active: sat
+     
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/sqlmap/*.xml
+       
