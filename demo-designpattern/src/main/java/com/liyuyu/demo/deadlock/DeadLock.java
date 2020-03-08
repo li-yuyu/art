@@ -1,4 +1,4 @@
-package com.liyuyu.demo.designpattern;
+package com.liyuyu.demo.deadlock;
 
 public class DeadLock {
 	private static Object lock1 = new Object();
