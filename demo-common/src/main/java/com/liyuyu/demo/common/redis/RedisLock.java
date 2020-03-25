@@ -79,10 +79,7 @@ public class RedisLock {
 	 * @return
 	 */
 	public boolean unlock() {
-		List<String> keys = Arrays.asList(key);
-		List<String> scriptArgs = Arrays.asList(value);
-		
-		Long result = redisTemplate.execute(UNLOCK_SCRIPT, keys, scriptArgs);
+		Long result = redisTemplate.execute(UNLOCK_SCRIPT, Arrays.asList(key), value);
 		
 		return result != null;
 	}
