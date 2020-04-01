@@ -8,7 +8,7 @@
 		<artifactId>art</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>common</artifactId>
+	<artifactId>art-designpattern</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,16 +31,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-redis</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

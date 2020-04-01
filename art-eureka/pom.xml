@@ -8,7 +8,7 @@
 		<artifactId>art</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>eureka</artifactId>
+	<artifactId>art-eureka</artifactId>
 	<packaging>jar</packaging>
 
 	<properties>

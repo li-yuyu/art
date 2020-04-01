@@ -8,7 +8,7 @@
 		<artifactId>art</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>web</artifactId>
+	<artifactId>art-web</artifactId>
 
 	<properties>
 		<jdk.version>1.8</jdk.version>
@@ -21,7 +21,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.liyuyu</groupId>
-			<artifactId>common</artifactId>
+			<artifactId>art-common</artifactId>
 		</dependency>
 		<!-- spring boot -->
 		<dependency>

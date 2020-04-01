@@ -8,10 +8,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>designpattern</module>
-		<module>common</module>
-		<module>web</module>
-		<module>eureka</module>
+		<module>art-designpattern</module>
+		<module>art-common</module>
+		<module>art-web</module>
+		<module>art-eureka</module>
 	</modules>
 
 	<parent>
@@ -31,7 +31,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.liyuyu</groupId>
-				<artifactId>common</artifactId>
+				<artifactId>art-common</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Swagger -->
