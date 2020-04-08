@@ -28,7 +28,7 @@ public class Swagger2Config {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Demo API")
-                .termsOfServiceUrl("https://github.com/li-yuyu/demo/tree/master/demo-web")
+                .termsOfServiceUrl("https://github.com/li-yuyu/art/tree/master/art-web")
                 .contact("15221957213")
                 .version("1.0")
                 .description("API 描述")

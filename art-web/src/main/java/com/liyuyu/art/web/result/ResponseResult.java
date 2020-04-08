@@ -8,19 +8,7 @@ package com.liyuyu.art.web.result;
  */
 public class ResponseResult<T> {
 
-	public static final String SUCCESS_STATUS = "1";
-	public static final String ERROR_STATUS = "0";
-	public static final String SUCCESS_CODE = "00000000";
-
-	/**
-	 * 1 success, 0 failure
-	 */
-	private String status;
-
-	/**
-	 * 00000000 success, esle failure
-	 */
-	private String error;
+	private int code;
 
 	private String msg;
 
@@ -29,9 +17,8 @@ public class ResponseResult<T> {
 	public ResponseResult() {
 	}
 
-	public ResponseResult(String status, String error, String msg, T data) {
-		this.status = status;
-		this.error = error;
+	public ResponseResult(int code, String msg, T data) {
+		this.code = code;
 		this.msg = msg;
 		this.data = data;
 	}
@@ -45,69 +32,58 @@ public class ResponseResult<T> {
 	}
 
 	public static <T> ResponseResult<T> success(String msg, T data) {
-		return build(SUCCESS_STATUS, SUCCESS_CODE, msg, data);
+		return build(ResultCode.SUCCESS.code, msg, data);
 	}
 
-	public static <T> ResponseResult<T> error(String error) {
-		return error(error, null);
+	public static <T> ResponseResult<T> error(int code) {
+		return error(code, null);
 	}
 
-	public static <T> ResponseResult<T> error(String error, String msg) {
-		return build(ERROR_STATUS, error, msg, null);
+	public static <T> ResponseResult<T> error(int code, String msg) {
+		return build(code, msg, null);
 	}
 
-	public static <T> ResponseResult<T> error(String error, String msg, T data) {
-		return build(ERROR_STATUS, error, msg, data);
+	public static <T> ResponseResult<T> error(int code, String msg, T data) {
+		return build(code, msg, data);
 	}
 
-	private static <T> ResponseResult<T> build(String status, String error, String msg, T data) {
-		return new ResponseResult<T>(status, error, msg, data);
+	private static <T> ResponseResult<T> build(int code, String msg, T data) {
+		return new ResponseResult<T>(code, msg, data);
 	}
 
 	public static <T> Boolean isSuccess(ResponseResult<T> result) {
-		if (result == null || result.getStatus() == null || result.getError() == null) {
+		if (result == null) {
 			return false;
 		}
-		return result.getStatus().equals(SUCCESS_STATUS) && result.getError().equals(SUCCESS_CODE);
+		return result.getCode() == ResultCode.SUCCESS.code;
 	}
 
 	public static <T> Boolean isSuccessWithData(ResponseResult<T> result) {
 		return isSuccess(result) && result.getData() != null;
 	}
 
-	public String getStatus() {
-		return status;
+	public int getCode() {
+		return code;
 	}
 
-	public ResponseResult<T> setStatus(String status) {
-		this.status = status;
-		return this;
-	}
-
-	public String getError() {
-		return error;
-	}
-
-	public ResponseResult<T> setError(String error) {
-		this.error = error;
-		return this;
+	public void setCode(int code) {
+		this.code = code;
 	}
 
 	public String getMsg() {
 		return msg;
 	}
 
-	public ResponseResult<T> setMsg(String msg) {
+	public void setMsg(String msg) {
 		this.msg = msg;
-		return this;
 	}
 
 	public T getData() {
 		return data;
 	}
 
-	public ResponseResult<T> setData(T data) {
+	public void setData(T data) {
 		this.data = data;
-		return this;
 	}
+
 }

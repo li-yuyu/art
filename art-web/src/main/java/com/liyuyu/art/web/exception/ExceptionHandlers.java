@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.liyuyu.art.web.enums.ErrorCodeEnum;
 import com.liyuyu.art.web.result.ResponseResult;
+import com.liyuyu.art.web.result.ResultCode;
 
 @ControllerAdvice
 public class ExceptionHandlers {
@@ -18,6 +18,6 @@ public class ExceptionHandlers {
 	@ResponseBody
 	protected ResponseResult<String> serverExceptionHandler(final Exception e) {
 		LOGGER.error(e.getMessage(), e);
-		return ResponseResult.error(ErrorCodeEnum.SYSTEM_EXCEPTION.getCode(), e.getMessage());
+		return ResponseResult.error(ResultCode.INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
 	}
 }

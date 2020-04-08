@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liyuyu.art.web.dto.DemoDTO;
-import com.liyuyu.art.web.enums.ErrorCodeEnum;
 import com.liyuyu.art.web.page.PageResult;
 import com.liyuyu.art.web.result.ResponseResult;
+import com.liyuyu.art.web.result.ResultCode;
 import com.liyuyu.art.web.service.DemoService;
 import com.liyuyu.art.web.vo.DemoVO;
 
@@ -42,7 +42,7 @@ public class DemoController {
 	@ApiImplicitParams({ @ApiImplicitParam(name = "name", value = "姓名", required = true, example = "liyuyu"), })
 	public ResponseResult<PageResult<DemoVO>> post(@RequestBody @Valid DemoDTO dto, BindingResult validResult) {
 		if (validResult.hasErrors()) {
-			return ResponseResult.error(ErrorCodeEnum.ILLEGAL_PARAM.getCode(),
+			return ResponseResult.error(ResultCode.PARAM_VALID_ERROR.getCode(),
 					validResult.getFieldError().getDefaultMessage());
 		}
 		PageResult<DemoVO> result = demoService.listByPage(dto);
