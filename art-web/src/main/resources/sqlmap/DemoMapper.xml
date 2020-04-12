@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.liyuyu.demo.web.dao.DemoMapper">
-	<resultMap id="BaseResultMap" type="com.liyuyu.demo.web.entity.DemoDO">
+<mapper namespace="com.liyuyu.art.web.dao.DemoMapper">
+	<resultMap id="BaseResultMap" type="com.liyuyu.art.web.entity.DemoDO">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="age" jdbcType="INTEGER" property="age" />
@@ -22,7 +22,7 @@
 		'Lyle' as name,28 as age UNION All SELECT 'sam'as name,27 as age 
 		UNION All SELECT 'rose' as name,24 as age) t;
 	</select>
-	<select id="selectAllByPage" parameterType="com.liyuyu.demo.web.page.Page"
+	<select id="selectAllByPage" parameterType="com.liyuyu.art.web.page.Page"
 		resultMap="BaseResultMap">
 		SELECT 'Lyle' as name,28 as age UNION All SELECT 'sam' as name,27 as age
 		UNION All SELECT 'rose' as name,24 as age
