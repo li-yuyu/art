@@ -8,6 +8,8 @@ package com.liyuyu.art.web.result;
  */
 public class ResponseResult<T> {
 
+	private boolean success;
+	
 	private int code;
 
 	private String msg;
