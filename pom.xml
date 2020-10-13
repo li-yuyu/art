@@ -11,7 +11,6 @@
 		<module>art-designpattern</module>
 		<module>art-common</module>
 		<module>art-web</module>
-		<module>art-eureka</module>
 	</modules>
 
 	<parent>
