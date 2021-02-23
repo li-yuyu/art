@@ -37,10 +37,5 @@
 			<artifactId>spring-data-redis</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<optional>true</optional>
-		</dependency>
 	</dependencies>
 </project>

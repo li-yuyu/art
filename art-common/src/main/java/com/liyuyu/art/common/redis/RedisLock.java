@@ -2,18 +2,13 @@ package com.liyuyu.art.common.redis;
 
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisCommands;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 
 /**
- * @Description: 注意springboot2.0以上的spring-boot-starter-data-redis，
- *               请排除默认实现lettuce-core包，使用Jedis
  * @author Lyle
  * @date 2019-06-14
  */
@@ -23,6 +18,7 @@ public class RedisLock {
 	private String key;
 	private String value;
 	private long timeout;
+	private TimeUnit unit;
 	private static final String UNLOCK_SCRIPT;
 
 	static {
@@ -39,14 +35,16 @@ public class RedisLock {
 	/**
 	 * @param redisTemplate
 	 * @param key           redis中的键值
-	 * @param timeout       超时时间 ms
+	 * @param timeout       超时时间
+	 * @param unit
 	 */
-	public RedisLock(RedisTemplate<String, String> redisTemplate, String key, long timeout) {
+	public RedisLock(RedisTemplate<String, String> redisTemplate, String key, long timeout, TimeUnit unit) {
 		super();
 		this.redisTemplate = redisTemplate;
 		this.key = key;
 		this.value = UUID.randomUUID().toString();
 		this.timeout = timeout;
+		this.unit = unit;
 	}
 
 	/**
@@ -55,29 +53,19 @@ public class RedisLock {
 	 * @return
 	 */
 	public boolean tryLock() {
-		RedisConnection connection = null;
-		try {
-			RedisConnectionFactory redisConnectionFactory = redisTemplate.getConnectionFactory();
-			connection = redisConnectionFactory.getConnection();
-			JedisCommands client = (JedisCommands) connection.getNativeConnection();
-			String status = client.set(key, value, "NX", "PX", timeout);
-			if ("OK".equals(status)) {
-				return true;
-			}
-			return false;
-		} finally {
-			if (connection != null) {
-				connection.close();
-			}
+		if (redisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit)) {
+			return true;
 		}
+		return false;
 	}
 
 	/**
 	 * 尝试获取锁，获取不到时自旋等待
+	 * 
 	 * @return
 	 * @throws InterruptedException
 	 */
-	public boolean tryLockAndWait() throws InterruptedException {
+	public boolean tryLockAndSpinWait() throws InterruptedException {
 		while (!tryLock()) {
 			Thread.sleep(200);
 		}
@@ -90,29 +78,11 @@ public class RedisLock {
 	 * @return
 	 */
 	public boolean unlock() {
-		RedisConnection connection = null;
-		Long result = null;
-		try {
-			RedisConnectionFactory redisConnectionFactory = redisTemplate.getConnectionFactory();
-			connection = redisConnectionFactory.getConnection();
-			Object nativeConnection = connection.getNativeConnection();
-			// 集群模式
-			if (nativeConnection instanceof JedisCluster) {
-				result = (Long) ((JedisCluster) nativeConnection).eval(UNLOCK_SCRIPT, Arrays.asList(key),
-						Arrays.asList(value));
-			}
+		RedisScript<Long> redisScript = new DefaultRedisScript<Long>(UNLOCK_SCRIPT, Long.class);
 
-			// 单机模式
-			if (nativeConnection instanceof Jedis) {
-				result = (Long) ((Jedis) nativeConnection).eval(UNLOCK_SCRIPT, Arrays.asList(key),
-						Arrays.asList(value));
-			}
-			return result == 1;
-		} finally {
-			if (connection != null) {
-				connection.close();
-			}
-		}
+		Long result = redisTemplate.execute(redisScript, Arrays.asList(key), value);
+
+		return result == 1;
 	}
 
 }
