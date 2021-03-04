@@ -26,7 +26,7 @@ public class RedisLock {
 		sb.append("if redis.call(\"get\",KEYS[1]) == ARGV[1] ");
 		sb.append("then ");
 		sb.append("    return redis.call(\"del\",KEYS[1]) ");
-		sb.append("else ");
+		sb.append("else ");	
 		sb.append("    return 0 ");
 		sb.append("end ");
 		UNLOCK_SCRIPT = sb.toString();
